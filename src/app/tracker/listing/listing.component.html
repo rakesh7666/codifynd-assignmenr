@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="loader text-center" *ngIf="isLoading">
+    <img src="../../../assets/loader.gif" class="img-fluid mt-5 mb-5">
+  </div>
+  <div class="main-content " *ngIf="historicalData && !ErrorMessage">
+    <div class="card mt-4 mb-4" *ngFor="let item of historicalData">
+      <div class="card-header">
+        <form class="form-group form-check mb-0" [formGroup]="checkboxGroup">
+          <input type="checkbox" class="form-check-input" value="{{item.symbol}}" id="{{item.symbol}}"
+            (change)="onCheckChange($event)" [formControl]="category">
+          <label class="form-check-label" for="{{item.symbol}}">{{item.symbol}}</label>
+        </form>
+      </div>
+      <div class="card-body">
+
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Price</th>
+                  <th scope="col">Volume</th>
+                  <th scope="col">Start Time</th>
+                  <th scope="col">End Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{item.price | number : '1.2-2'}}</td>
+                  <td>{{item.volume | number : '1.2-2'}}</td>
+                  <td>{{item.startTime}}</td>
+                  <td>{{item.endTime}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-md-6" *ngIf="item.prices && item.time">
+            <canvas baseChart height="100" [data]="item.prices" [options]="options" [labels]="item.time"
+              [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType">
+            </canvas>
+          </div>
+        </div>
+        <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="ErrorMessage">
+    {{ErrorMessage}}
+  </div>
+</div>
